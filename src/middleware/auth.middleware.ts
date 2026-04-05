@@ -26,14 +26,17 @@ export const authenticate = asyncHandler(
 
     const token = authHeader.split(' ')[1];
 
-    if (!token) {
+    if (!token || token.trim() === '') {
       throw new UnauthorizedError('Invalid token format');
     }
 
-    const decoded = verifyToken(token);
-    req.user = decoded;
-
-    return next();
+    try {
+      const decoded = verifyToken(token);
+      req.user = decoded;
+      return next();
+    } catch (error) {
+      throw new UnauthorizedError('Invalid or expired token');
+    }
   }
 );
 
