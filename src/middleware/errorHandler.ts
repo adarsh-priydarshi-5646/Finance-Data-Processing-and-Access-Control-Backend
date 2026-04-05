@@ -32,13 +32,16 @@ export const errorHandler = (
     isOperational = err.isOperational;
   }
 
-  /* Log error */
+  /* Log error with detailed context */
   logger.error('Error occurred:', {
     message: err.message,
     stack: err.stack,
     url: req.url,
     method: req.method,
     ip: req.ip,
+    userAgent: req.get('user-agent'),
+    timestamp: new Date().toISOString(),
+    statusCode,
   });
 
   /* Send error response */
