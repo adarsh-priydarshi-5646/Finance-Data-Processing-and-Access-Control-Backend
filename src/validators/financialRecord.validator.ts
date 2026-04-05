@@ -8,13 +8,29 @@ import { body, param, query } from 'express-validator';
 import { TransactionType } from '../types';
 
 export const createRecordValidator = [
-  body('amount').isFloat({ gt: 0 }).withMessage('Amount must be greater than 0'),
+  body('amount')
+    .isFloat({ gt: 0, max: 999999999 })
+    .withMessage('Amount must be between 0 and 999,999,999'),
   body('type').isIn(Object.values(TransactionType)).withMessage('Invalid transaction type'),
   body('category')
     .trim()
+    .notEmpty()
+    .withMessage('Category is required')
     .isLength({ min: 2, max: 50 })
-    .withMessage('Category must be 2-50 characters'),
-  body('date').isISO8601().withMessage('Valid date is required'),
+    .withMessage('Category must be 2-50 characters')
+    .matches(/^[a-zA-Z0-9\s-]+$/)
+    .withMessage('Category can only contain letters, numbers, spaces, and hyphens'),
+  body('date')
+    .isISO8601()
+    .withMessage('Valid date is required')
+    .custom((value) => {
+      const date = new Date(value);
+      const now = new Date();
+      if (date > now) {
+        throw new Error('Date cannot be in the future');
+      }
+      return true;
+    }),
   body('description')
     .optional()
     .trim()
