@@ -51,6 +51,11 @@ const userSchema = new Schema<IUser>(
   }
 );
 
+/* Create indexes for better query performance */
+userSchema.index({ email: 1 });
+userSchema.index({ role: 1, status: 1 });
+userSchema.index({ createdAt: -1 });
+
 /**
  * Pre-save middleware to hash password
  */
