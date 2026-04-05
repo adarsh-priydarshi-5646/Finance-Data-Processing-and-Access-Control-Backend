@@ -40,10 +40,16 @@ class Database {
     try {
       const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/finance_db';
 
-      await mongoose.connect(mongoUri);
+      await mongoose.connect(mongoUri, {
+        maxPoolSize: 10,
+        minPoolSize: 2,
+        socketTimeoutMS: 45000,
+        serverSelectionTimeoutMS: 5000,
+        family: 4,
+      });
 
       this.isConnected = true;
-      logger.info('MongoDB connected successfully');
+      logger.info('MongoDB connected successfully with connection pooling');
 
       mongoose.connection.on('error', (error) => {
         logger.error('MongoDB connection error:', error);
