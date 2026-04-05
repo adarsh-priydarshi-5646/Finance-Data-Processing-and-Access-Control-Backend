@@ -10,8 +10,11 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
     "seed": "ts-node src/scripts/seed.ts",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
   },
   "keywords": ["finance", "backend", "mongodb", "typescript", "express"],
   "author": "Adarsh Priyadarshi <adarshpriydarshi5646@gmail.com>",
