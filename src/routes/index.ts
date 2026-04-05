@@ -8,9 +8,15 @@ import { healthCheck } from '../controllers/health.controller';
 const router = Router();
 
 /**
+ * API Version
+ */
+const API_VERSION = '/api/v1';
+
+/**
  * Health check endpoint
  */
 router.get('/health', healthCheck);
+router.get(`${API_VERSION}/health`, healthCheck);
 
 /**
  * Mount route modules
