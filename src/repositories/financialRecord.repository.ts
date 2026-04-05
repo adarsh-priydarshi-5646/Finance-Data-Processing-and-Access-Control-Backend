@@ -42,7 +42,12 @@ export class FinancialRecordRepository {
     const limit = filters.limit || 50;
     const skip = (page - 1) * limit;
 
-    return FinancialRecord.find(query).sort({ date: -1 }).skip(skip).limit(limit);
+    return FinancialRecord.find(query)
+      .sort({ date: -1, createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean()
+      .exec();
   }
 
   /**
