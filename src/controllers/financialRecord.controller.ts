@@ -27,9 +27,14 @@ export const getAllRecords = asyncHandler(async (req: IAuthRequest, res: Respons
   };
 
   const records = await recordService.getAllRecords(filters);
+  const page = filters.page || 1;
+  const limit = filters.limit || 50;
 
   res.status(200).json({
     success: true,
+    count: records.length,
+    page,
+    limit,
     data: records,
   });
 });
