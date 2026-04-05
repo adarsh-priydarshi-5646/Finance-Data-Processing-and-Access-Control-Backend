@@ -18,16 +18,18 @@ A production-ready backend system for managing financial records with role-based
 - [Error Handling](#error-handling)
 - [Testing](#testing)
 - [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
 - [Author](#author)
 
 ## Features
 
-- User management with role-based access control
-- Financial records CRUD operations with filtering
-- Dashboard analytics with real-time calculations
+- User management with role-based access control (RBAC)
+- Financial records CRUD operations with advanced filtering
+- Dashboard analytics with real-time calculations and caching
 - JWT-based authentication and authorization
-- Comprehensive input validation
-- Centralized error handling
+- Comprehensive input validation with express-validator
+- Centralized error handling with custom error classes
 - Request logging with Winston and Morgan
 - Rate limiting for API protection
 - MongoDB database with Mongoose ODM
