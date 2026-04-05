@@ -57,8 +57,11 @@ const financialRecordSchema = new Schema<IFinancialRecord>(
  * Indexes for optimized queries
  */
 financialRecordSchema.index({ userId: 1, date: -1 });
+financialRecordSchema.index({ userId: 1, type: 1, date: -1 });
+financialRecordSchema.index({ userId: 1, category: 1, date: -1 });
 financialRecordSchema.index({ type: 1, category: 1 });
 financialRecordSchema.index({ date: -1 });
+financialRecordSchema.index({ createdAt: -1 });
 
 /**
  * Transform output
