@@ -7,6 +7,10 @@
 import { FinancialRecordRepository } from '../repositories/financialRecord.repository';
 import { IDashboardSummary, ICategoryBreakdown, IMonthlyTrend, IFinancialRecord } from '../types';
 
+/* Simple in-memory cache */
+const cache = new Map<string, { data: unknown; timestamp: number }>();
+const CACHE_TTL = 5 * 60 * 1000; /* 5 minutes */
+
 /**
  * Dashboard service class
  */
@@ -18,11 +22,27 @@ export class DashboardService {
   }
 
   /**
+   * Get cached data or fetch new
+   * @param {string} key - Cache key
+   * @param {Function} fetchFn - Function to fetch data
+   * @returns {Promise<T>} Cached or fresh data
+   */
+  private async getCached<T>(key: string, fetchFn: () => Promise<T>): Promise<T> {
+    const cached = cache.get(key);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      return cached.data as T;
+    }
+    const data = await fetchFn();
+    cache.set(key, { data, timestamp: Date.now() });
+    return data;
+  }
+
+  /**
    * Get dashboard summary
    * @returns {Promise<IDashboardSummary>} Summary statistics
    */
   async getSummary(): Promise<IDashboardSummary> {
-    return this.recordRepository.getSummary();
+    return this.getCached('summary', () => this.recordRepository.getSummary());
   }
 
   /**
@@ -30,7 +50,7 @@ export class DashboardService {
    * @returns {Promise<ICategoryBreakdown>} Category breakdown
    */
   async getCategoryBreakdown(): Promise<ICategoryBreakdown> {
-    return this.recordRepository.getCategoryBreakdown();
+    return this.getCached('categoryBreakdown', () => this.recordRepository.getCategoryBreakdown());
   }
 
   /**
