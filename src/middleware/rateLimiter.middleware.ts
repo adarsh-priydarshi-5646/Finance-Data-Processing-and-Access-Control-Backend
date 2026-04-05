@@ -16,6 +16,12 @@ export const apiLimiter = rateLimit({
   message: 'Too many requests from this IP, please try again later',
   standardHeaders: true,
   legacyHeaders: false,
+  handler: (_req, res) => {
+    res.status(429).json({
+      success: false,
+      error: 'Too many requests from this IP, please try again later',
+    });
+  },
 });
 
 /**
@@ -28,4 +34,10 @@ export const authLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: true,
+  handler: (_req, res) => {
+    res.status(429).json({
+      success: false,
+      error: 'Too many authentication attempts, please try again after 15 minutes',
+    });
+  },
 });
